@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8"></meta>
+    <title>itemList</title>
+    <script type="text/javascript" src="/static/js/angular.js"></script>
+</head>
+<body ng-app="">
+<p th:text="${itemList}" ng-model="item"></p>
+
+<div ng-init="products=[{name:'iphone7',img:'iphone7.jpg'},{name:'iphone789',img:'iphone7.jpg'},{name:'iphone7777',img:'iphone7.jpg'}]">
+    <ul>
+        <li ng-repeat="product in products">
+            商品名称:{{product.name}}
+            <!--<img src="/static/img/{{product.img}}" />-->
+        </li>
+    </ul>
+</div>
+
+<div>
+
+    <table>
+        <tr>
+            <th>产品名称</th>
+            <th>产品价格</th>
+            <th>库存</th>
+        </tr>
+        <tr th:each="item : ${itemList}">
+            <td th:text="${item.itemName}"></td>
+            <td th:text="${item.itemPrice}"></td>
+            <td th:text="${item.itemStock}"></td>
+        </tr>
+    </table>
+
+</div>
+</body>
+<script type="text/javascript">
+
+    function setItemList() {
+
+    }
+
+</script>
+</html>
