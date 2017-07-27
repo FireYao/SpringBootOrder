@@ -17,7 +17,7 @@
 
 <body>
 <div>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="##"><span class="am-icon-home am-icon-md"></span>我的订单</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/order/list"><span class="am-icon-home am-icon-md"></span>我的订单</a>
 </div>
 <div class="am-cf am-padding">
     <div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">商品列表</strong> /
@@ -96,8 +96,8 @@
 <script type="text/javascript">
     var selected = [];
     var app = angular.module("myApp", []);
+    console.log(app);
     app.controller("itemList", function ($scope, $http) {
-
         $http.get("/items").success(function (response) {
             $scope.items = response;
         });
@@ -108,20 +108,32 @@
         };
 
         $scope.updateSelection = function ($event, item) {
+            var orderItem = {
+                itemId: item.itemId,
+                itemNums: 5,
+                itemName: item.itemName,
+                itemPrice: item.itemPrice
+            };
             var checkbox = $event.target;
             var checked = checkbox.checked;
             if (checked) {
-                selected.push(item);
+                selected.push(orderItem);
             } else {
-                var idx = selected.indexOf(item);
+                var idx = selected.indexOf(orderItem);
                 selected.splice(idx, 1);
             }
         };
 
         $scope.createOneOrder = function (item) {
-            var item = [item];
+            var orderItem = {
+                itemId: item.itemId,
+                itemNums: 5,
+                itemName: item.itemName,
+                itemPrice: item.itemPrice
+            };
+            var orderItem = [orderItem];
             $http.post('/order',
-                JSON.stringify(item)
+                JSON.stringify(orderItem)
             ).success(function (response) {
                 console.log(response)
             });
@@ -134,7 +146,10 @@
 
         $scope.createOrder = function () {
             console.log(JSON.stringify(selected))
-
+           /* if (selected) {
+                alert("请选择！");
+                return;
+            }*/
             $http.post('/order',
                 JSON.stringify(selected)
             ).success(function (response) {

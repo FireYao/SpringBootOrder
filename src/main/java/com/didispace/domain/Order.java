@@ -1,11 +1,13 @@
 package com.didispace.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @DynamicUpdate
@@ -19,12 +21,23 @@ public class Order implements Serializable {
     private Integer userId;
     private Integer amout;
     private Integer stauts;
-    @Column(name = "create_time")
+    @JSONField(format="yyyy-MM-dd")
     private Date createTime;
-    @Column(name = "update_time")
+    @JSONField(format="yyyy-MM-dd")
     private Date updateTime;
-    @Column(name = "deal_time")
+    @JSONField(format="yyyy-MM-dd")
     private Date dealTime;
+
+    @Transient
+    private List<OrderItem> orderItems;
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     public int getOrderId() {
         return orderId;
@@ -64,7 +77,7 @@ public class Order implements Serializable {
         this.stauts = stauts;
     }
 
-
+    @Column(name = "create_time")
     public Date getCreateTime() {
         return createTime;
     }
@@ -73,7 +86,7 @@ public class Order implements Serializable {
         this.createTime = createTime;
     }
 
-
+    @Column(name = "update_time")
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -82,7 +95,7 @@ public class Order implements Serializable {
         this.updateTime = updateTime;
     }
 
-
+    @Column(name = "deal_time")
     public Date getDealTime() {
         return dealTime;
     }

@@ -15,9 +15,13 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Null;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Transactional
 @Service
@@ -31,10 +35,14 @@ public class OrderServiceImpl implements OrderService {
     private EntityManager entityManager;
 
     @Override
-    public void createOrder(List<Item> items) {
-
+    public void createOrder(List<OrderItem> items) {
         Order order = new Order();
-        int amout = items.stream().map(item -> item.getItemPrice() * 3).mapToInt(Integer::intValue).sum();
+
+        int amout = items.stream()
+                .map(orderItem -> orderItem.getItemNums() * orderItem.getItemPrice())
+                .mapToInt(Integer::intValue)
+                .sum();
+
         order.setAmout(amout);
         order.setCreateTime(new Date());
         order.setStauts(1);
@@ -42,19 +50,10 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(order);
 
-        List<OrderItem> oiList = new ArrayList<>();
-
-
         items.stream().forEach(item -> {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrderId(order.getOrderId());
-            orderItem.setItemId(item.getItemId());
-            orderItem.setItemName(item.getItemName());
-            orderItem.setItemNums(4);
-            orderItem.setItemPrice(item.getItemPrice());
-            oiList.add(orderItem);
+            item.setOrderId(order.getOrderId());
         });
-        orderItemService.save(oiList);
+        orderItemService.save(items);
     }
 
     @Override
@@ -69,27 +68,32 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<JSONObject> findAll() {
+    public List<Order> findAll() {
         List<Order> orders = orderRepository.findAll();
         return getResult(orders);
     }
 
     @Override
-    public List<JSONObject> findByUser(int userId) {
+    public List<Order> findByUser(int userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
         return getResult(orders);
     }
 
+    @Override
+    public Order findById(int orderId) {
+        Order order = orderRepository.findOne(orderId);
+        order.setOrderItems(orderItemService.findByOrderId(orderId));
+        return order;
+    }
 
-    private List<JSONObject> getResult(List<Order> orders) {
-        List<JSONObject> list = new ArrayList<>();
-        for (Order order : orders) {
-            JSONObject result = new JSONObject();
-            result.put("order", order);
-            result.put("orderItem", orderItemService.findByOrderId(order.getOrderId()));
-            list.add(result);
-        }
-        return list;
+
+    private List<Order> getResult(List<Order> orders) {
+
+        orders.stream().forEach(order -> {
+            order.setOrderItems(orderItemService.findByOrderId(order.getOrderId()));
+        });
+
+        return orders;
     }
 
 }
