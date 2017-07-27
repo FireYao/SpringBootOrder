@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0"/>
+
+    <title>商品</title>
+
+    <link href="/static/AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css"/>
+
+    <link href="/static/css/personal.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/orstyle.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/static/js/angular.js"></script>
+</head>
+
+<body>
+<div>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="##"><span class="am-icon-home am-icon-md"></span>我的订单</a>
+</div>
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">商品列表</strong> /
+        <small>Items</small>
+    </div>
+</div>
+
+<div ng-controller="createOrder">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="am-btn am-btn-warning" ng-click="createOrder()">批量下单
+</button>
+</div>
+
+<div class="am-tabs am-tabs-d2 am-margin data-am-tabs">
+
+    <div class="order-top">
+        <div class="th td-select">
+            <td class="td-inner">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </div>
+        <div class="th th-item" style="width: 300px;">
+            <td class="td-inner">商品</td>
+        </div>
+        <div class="th th-price">
+            <td class="td-inner">单价</td>
+        </div>
+        <div class="th th-number">
+            <td class="td-inner">库存</td>
+        </div>
+        <div class="th th-operation">
+            <td class="td-inner">操作</td>
+        </div>
+
+    </div>
+    <div ng-controller="itemList">
+        <ul class="item-list" ng-repeat="item in items">
+            <li class="th td-select" style="padding-top: 40px;">
+                <label class="am-checkbox am-secondary">
+                    <input type="checkbox" id="{{item.itemId}}" ng-true-value="true" ng-false-value="false"
+                           ng-checked="isChecked(item.itemId)" ng-click="updateSelection($event,item)"
+                    />
+                </label>
+            </li>
+            <li class="td td-item" style="width: 300px;">
+                <div class="item-pic">
+                    <a href="#" class="J_MakePoint">
+                        <img src="/static/images/kouhong.jpg_80x80.jpg" class="itempic J_ItemImg"/>
+                    </a>
+                </div>
+                <div class="item-info">
+                    <div class="item-basic-info">
+                        <a href="#">
+                            <p>{{item.itemName}}</p>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li class="td td-price">
+                <div class="item-price">
+                    {{item.itemPrice}}
+                </div>
+            </li>
+            <li class="td td-number">
+                <div class="item-number">
+                    <span>{{item.itemStock}}</span>
+                </div>
+            </li>
+            <li class="td td-operation">
+                <div class="item-operation">
+                    <button type="button" class="am-btn am-btn-danger" ng-click="createOneOrder(item)">下单</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+    var selected = [];
+    var app = angular.module("myApp", []);
+    app.controller("itemList", function ($scope, $http) {
+
+        $http.get("/items").success(function (response) {
+            $scope.items = response;
+        });
+
+
+        $scope.isChecked = function (id) {
+            return selected.indexOf(id) >= 0;
+        };
+
+        $scope.updateSelection = function ($event, item) {
+            var checkbox = $event.target;
+            var checked = checkbox.checked;
+            if (checked) {
+                selected.push(item);
+            } else {
+                var idx = selected.indexOf(item);
+                selected.splice(idx, 1);
+            }
+        };
+
+        $scope.createOneOrder = function (item) {
+            var item = [item];
+            $http.post('/order',
+                JSON.stringify(item)
+            ).success(function (response) {
+                console.log(response)
+            });
+
+        }
+    })
+
+
+    app.controller('createOrder', function ($scope, $http) {
+
+        $scope.createOrder = function () {
+            console.log(JSON.stringify(selected))
+
+            $http.post('/order',
+                JSON.stringify(selected)
+            ).success(function (response) {
+                console.log(response)
+            });
+
+        }
+    });
+
+
+</script>
+</html>
