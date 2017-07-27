@@ -15,7 +15,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("update Order o set o.stauts = :stauts,o.updateTime = :updateTime where o.orderId = :orderId")
     void updateStauts(@Param("stauts") int stauts, @Param("orderId") int orderId, @Param("updateTime") Date updateTime);
 
-    List<Order> findOrderByCreateTime();
 
     List<Order> findByUserId(int userId);
 }

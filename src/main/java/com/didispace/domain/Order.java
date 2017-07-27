@@ -19,11 +19,8 @@ public class Order implements Serializable {
     private Integer userId;
     private Integer amout;
     private Integer stauts;
-    @Column(name = "create_time")
     private Date createTime;
-    @Column(name = "update_time")
     private Date updateTime;
-    @Column(name = "deal_time")
     private Date dealTime;
 
     public int getOrderId() {
@@ -64,7 +61,7 @@ public class Order implements Serializable {
         this.stauts = stauts;
     }
 
-
+    @Column(name = "create_time")
     public Date getCreateTime() {
         return createTime;
     }
@@ -73,7 +70,7 @@ public class Order implements Serializable {
         this.createTime = createTime;
     }
 
-
+    @Column(name = "update_time")
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -82,7 +79,7 @@ public class Order implements Serializable {
         this.updateTime = updateTime;
     }
 
-
+    @Column(name = "deal_time")
     public Date getDealTime() {
         return dealTime;
     }

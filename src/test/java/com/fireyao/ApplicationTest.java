@@ -100,10 +100,10 @@ public class ApplicationTest {
     @Test
     public void name4() throws Exception {
 
-//        List<JSONObject> all = orderService.findAll();
-        List<Order> orders = orderRepository.findByUserId(1);
-
-        print(orders);
+        List<JSONObject> all = orderService.findAll();
+//        List<Order> orders = orderRepository.findByUserId(1);
+//        List<Item> all = itemService.findItemsByPrice(100);
+        print(all);
 
     }
 
