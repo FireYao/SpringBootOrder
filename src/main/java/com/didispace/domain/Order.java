@@ -1,11 +1,13 @@
 package com.didispace.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @DynamicUpdate
@@ -19,9 +21,23 @@ public class Order implements Serializable {
     private Integer userId;
     private Integer amout;
     private Integer stauts;
+    @JSONField(format="yyyy-MM-dd")
     private Date createTime;
+    @JSONField(format="yyyy-MM-dd")
     private Date updateTime;
+    @JSONField(format="yyyy-MM-dd")
     private Date dealTime;
+
+    @Transient
+    private List<OrderItem> orderItems;
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     public int getOrderId() {
         return orderId;

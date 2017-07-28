@@ -90,8 +90,6 @@ public class ApplicationTest {
     public void name3() throws Exception {
 //        orderItemService.deleteByOrderId(2);
 
-        List<Item> items = itemService.findItemsByPrice(100);
-        orderService.createOrder(items);
 
 //        orderRepository.setCreateTime(new Date(),16);
 
@@ -100,10 +98,9 @@ public class ApplicationTest {
     @Test
     public void name4() throws Exception {
 
-        List<JSONObject> all = orderService.findAll();
+        List<Order> orders = orderService.findAll();
 //        List<Order> orders = orderRepository.findByUserId(1);
-//        List<Item> all = itemService.findItemsByPrice(100);
-        print(all);
+        print(orders);
 
     }
 
