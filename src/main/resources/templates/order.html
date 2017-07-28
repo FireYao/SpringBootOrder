@@ -63,7 +63,7 @@
 
             <div class="order-main">
                 <div ng-controller="orderListCtr" class="order-list">
-
+                    <span hidden="hidden">{{flag}}</span>
                     <!--交易成功-->
                     <div class="order-status5" ng-repeat="order in orders">
                         <div class="order-title">
@@ -120,7 +120,8 @@
                                         </div>
                                     </li>
                                     <li class="td td-change">
-                                        <div class="am-btn am-btn-danger anniu" ng-bind="setChange(order.stauts)">
+                                        <div class="am-btn am-btn-danger anniu" ng-bind="setChange(order.stauts)"
+                                             ng-click="changeStauts(order.orderId,order.stauts)">
                                         </div>
                                     </li>
                                 </div>
@@ -145,6 +146,8 @@
         </div>
 
     </div>
+
+
 </div>
 
 </body>
@@ -159,14 +162,12 @@
             if (stauts == 1)
                 return "未支付";
             if (stauts == 2)
-                return "已付款";
-            if (stauts == 3)
                 return "未发货";
-            if (stauts == 4)
+            if (stauts == 3)
                 return "已发货";
-            if (stauts == 5)
+            if (stauts == 4)
                 return "交易成功";
-            if (stauts == 6)
+            if (stauts == 5)
                 return "交易关闭";
         }
 
@@ -176,21 +177,50 @@
             if (stauts == 2)
                 return "提醒发货";
             if (stauts == 3)
-                return "提醒发货";
-            if (stauts == 4)
                 return "确认收货";
+            if (stauts == 4)
+                return "交易完成";
             if (stauts == 5)
-                return "删除订单";
-            if (stauts == 6)
-                return "删除订单";
+                return "交易关闭";
         }
 
         $scope.showDealTime = function (dealTime) {
-            console.log(dealTime);
-            if (dealTime == null || dealTime == undefined || dealTime == "") {
-                return false;
-            }else
-                return true;
+            return dealTime == null || dealTime == undefined || dealTime == "" ? false : true;
+        }
+
+        $scope.flag = false;
+        $scope.changeStauts = function (orderId, stauts) {
+
+            if (stauts == 5)
+                return;
+            if (stauts == 4) {
+                alert("交易完成，去分享评论吧;");
+                return;
+            }
+
+            var flag = $scope.flag;
+            console.log(flag)
+            if (stauts == 2) {
+                if (flag == true)
+                    alert("已经提醒过了!");
+            }
+
+            $http({
+                url: '/order',
+                method: 'put',
+
+                params: {
+                    orderId: orderId,
+                    stauts: stauts
+                },
+            }).success(function (res) {
+                console.log(res)
+                if (res == 2) {
+                    $scope.flag = true;
+                    return;
+                }
+                window.location.reload();
+            })
         }
     });
 

@@ -1,87 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="myApp">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0"/>
 
-	<head>
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0"/>
+    <title>商品</title>
 
-		<title>商品</title>
+    <link href="AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css"/>
+    <link href="AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css"/>
 
-		<link href="AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css"/>
-		<link href="AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css"/>
-
-		<link href="css/personal.css" rel="stylesheet" type="text/css"/>
-		<link href="css/orstyle.css" rel="stylesheet" type="text/css"/>
-
-	</head>
+    <link href="css/personal.css" rel="stylesheet" type="text/css"/>
+    <link href="css/orstyle.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/static/js/angular.js"></script>
+</head>
 
 <body>
-		<div class="am-cf am-padding">
-			<div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">商品列表</strong> / <small>Items</small></div>
-		</div>
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">商品列表</strong> /
+        <small>Items</small>
+    </div>
+</div>
 
 
-<div class="am-tabs am-tabs-d2 am-margin data-am-tabs" >
+<div class="am-tabs am-tabs-d2 am-margin data-am-tabs">
 
-					<div class="order-top">
-						<div class="th td-select">
-							<td class="td-inner">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-						</div>
-						<div class="th th-item" style="width: 300px;">
-							<td class="td-inner">商品</td>
-						</div>
-						<div class="th th-price">
-							<td class="td-inner">单价</td>
-						</div>
-						<div class="th th-number">
-							<td class="td-inner">库存</td>
-						</div>
-						<div class="th th-operation">
-							<td class="td-inner">操作</td>
-						</div>
-										
-					</div>
-					<div>
-						<ul class="item-list" th:each="item : ${itemList}">
-							<li th:text="${item.itemId}" hidden="hidden">
-							</li>
-							<li class="th td-select" style="padding-top: 40px;">
-								<label class="am-checkbox am-secondary">
-									<input type="checkbox" value="" data-am-ucheck>
-								</label>
-							</li>
-							<li class="td td-item" style="width: 300px;">
-								<div class="item-pic">
-									<a href="#" class="J_MakePoint">
-										<img src="images/kouhong.jpg_80x80.jpg" class="itempic J_ItemImg"/>
-									</a>
-								</div>
-								<div class="item-info">
-									<div class="item-basic-info">
-										<a href="#">
-											<p th:text="${item.itemName}"></p>
-										</a>
-									</div>
-								</div>
-							</li>
-							<li class="td td-price">
-								<div class="item-price" th:text="${item.itemPrice}">
-								</div>
-							</li>
-							<li class="td td-number">
-								<div class="item-number">
-									<span th:text="${item.itemStock}"></span>
-								</div>
-							</li>
-							<li class="td td-operation">
-								<div class="item-operation">
-									<button type="button" class="am-btn am-btn-danger">下单</button>
-								</div>
-							</li>
-						</ul>
-					</div>
-	</div>
+    <div class="order-top">
+        <div class="th td-select">
+            <td class="td-inner">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </div>
+        <div class="th th-item" style="width: 300px;">
+            <td class="td-inner">商品</td>
+        </div>
+        <div class="th th-price">
+            <td class="td-inner">单价</td>
+        </div>
+        <div class="th th-number">
+            <td class="td-inner">库存</td>
+        </div>
+        <div class="th th-operation">
+            <td class="td-inner">操作</td>
+        </div>
+        <div class="th th-buyNum">
+            <td class="td-inner">购买数量</td>
+        </div>
+    </div>
+    <div ng-controller="itemL">
+        <ul class="item-list" th:each="item : ${itemList}">
+            <li th:text="${item.itemId}" hidden="hidden">
+            </li>
+            <li class="th td-select" style="padding-top: 40px;">
+                <label class="am-checkbox am-secondary">
+                    <input type="checkbox" value=""/>
+                </label>
+            </li>
+            <li class="td td-item" style="width: 300px;">
+                <div class="item-pic">
+                    <a href="#" class="J_MakePoint">
+                        <img src="images/kouhong.jpg_80x80.jpg" class="itempic J_ItemImg"/>
+                    </a>
+                </div>
+                <div class="item-info">
+                    <div class="item-basic-info">
+                        <a href="#">
+                            <p th:text="${item.itemName}"></p>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li class="td td-price">
+                <div class="item-price" th:text="${item.itemPrice}">
+                </div>
+            </li>
+            <li class="td td-number">
+                <div class="item-number">
+                    <span th:text="${item.itemStock}" ng-click="showNum()"></span>
+                </div>
+            </li>
+            <li class="td td-operation">
+                <div class="item-operation">
+                    <button type="button" class="am-btn am-btn-danger">下单</button>
+                </div>
+            </li>
+
+            <li class="td th-buyNum">
+                <div class="item-buyNum">
+                    <input type="text"/>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>
 
 </body>
+<script type="text/javascript">
 
-	</html>
+    var app = angular.module("myApp",[]);
+
+    app.controller("itemL",function ($scope) {
+        $scope.showNum = function () {
+        }
+    })
+
+</script>
+</html>

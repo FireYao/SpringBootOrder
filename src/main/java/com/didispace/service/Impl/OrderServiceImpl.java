@@ -6,8 +6,11 @@ import com.didispace.dao.OrderRepository;
 import com.didispace.domain.Item;
 import com.didispace.domain.Order;
 import com.didispace.domain.OrderItem;
+import com.didispace.service.ItemService;
 import com.didispace.service.OrderItemService;
 import com.didispace.service.OrderService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import springfox.documentation.spring.web.json.Json;
 
@@ -31,13 +34,20 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     @Resource
     private OrderItemService orderItemService;
+    @Resource
+    private ItemService itemService;
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public void createOrder(List<OrderItem> items) {
-        Order order = new Order();
 
+        //修改库存
+        items.forEach(item -> {
+            itemService.updateItemStock(item.getItemId(), item.getItemNums());
+        });
+
+        Order order = new Order();
         int amout = items.stream()
                 .map(orderItem -> orderItem.getItemNums() * orderItem.getItemPrice())
                 .mapToInt(Integer::intValue)
@@ -58,7 +68,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateStauts(int orderId, int stauts) {
-        orderRepository.updateStauts(stauts, orderId, new Date());
+        Date dealTime = null;
+        if (stauts == 3)
+            dealTime = new Date();
+        if (stauts == 2)
+            return;
+        orderRepository.updateStauts(stauts + 1, orderId, new Date(), dealTime);
     }
 
     @Override
@@ -70,13 +85,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findAll() {
         List<Order> orders = orderRepository.findAll();
-        return getResult(orders);
+        getResult(orders);
+        return orders;
+    }
+
+    @Override
+    public Page<Order> findAll(Pageable pageable) {
+        Page<Order> page = orderRepository.findAll(pageable);
+        getResult(page.getContent());
+        return page;
     }
 
     @Override
     public List<Order> findByUser(int userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
-        return getResult(orders);
+        getResult(orders);
+        return orders;
     }
 
     @Override
@@ -86,14 +110,30 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    @Override
+    public List<Order> findAllOnlyOrder() {
+        return orderRepository.findAll();
+    }
 
-    private List<Order> getResult(List<Order> orders) {
+    @Override
+    public void sendOrCloseOrder(int orderId, int stauts) {
+
+        orderRepository.updateStauts(stauts + 1, orderId, new Date(), null);
+    }
+
+    @Override
+    public Page<Order> findAllOnlyOrder(Pageable pageable) {
+        Page<Order> page = orderRepository.findAll(pageable);
+        return page;
+    }
+
+
+    private void getResult(List<Order> orders) {
 
         orders.stream().forEach(order -> {
             order.setOrderItems(orderItemService.findByOrderId(order.getOrderId()));
         });
 
-        return orders;
     }
 
 }

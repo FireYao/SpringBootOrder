@@ -48,6 +48,7 @@ public class OrderController {
         if (items == null || items.size() < 1) {
             return "未选中任何商品";
         }
+
         System.out.println(JSONObject.toJSONString(items));
         orderService.createOrder(items);
         return "success";
@@ -66,6 +67,19 @@ public class OrderController {
     @ResponseBody
     public Object orderInfo(@PathVariable("orderId") Integer orderId) {
         return orderService.findById(orderId);
+    }
+
+    @PutMapping
+    @ResponseBody
+    @ApiOperation(value = "修改订单状态")
+    public Object updateOrder(@RequestParam Integer orderId, @RequestParam Integer stauts) {
+
+        System.out.println(orderId + ":::" + stauts);
+
+        orderService.updateStauts(orderId, stauts);
+        if (stauts == 2)
+            return "2";
+        return "success";
     }
 
 }

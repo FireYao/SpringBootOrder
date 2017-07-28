@@ -20,4 +20,6 @@ public interface ItemService {
     List<Item> findItemsByPrice(int price);
 
     List<Item> findByConditions(String name, Integer price, Integer stock);
+
+    void updateItemStock(int itemId, int buyNum);
 }

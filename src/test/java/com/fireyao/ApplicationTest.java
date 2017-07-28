@@ -16,6 +16,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.devtools.restart.RestartScope;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
@@ -88,11 +92,7 @@ public class ApplicationTest {
 
     @Test
     public void name3() throws Exception {
-//        orderItemService.deleteByOrderId(2);
-
-
-//        orderRepository.setCreateTime(new Date(),16);
-
+        itemService.updateItemStock(14, 10);
     }
 
     @Test
@@ -100,6 +100,25 @@ public class ApplicationTest {
 
         List<Order> orders = orderService.findAll();
 //        List<Order> orders = orderRepository.findByUserId(1);
+        print(orders);
+
+    }
+
+    @Test
+    public void name5() throws Exception {
+
+        orderService.updateStauts(1, 3);
+
+    }
+
+    @Test
+    public void name6() throws Exception {
+
+        Pageable pageable = new PageRequest(0, 2);
+        Page<Order> page = orderService.findAll(pageable);
+//        System.out.println(page.getTotalPages());
+//        System.out.println(page.getTotalElements());
+        List<Order> orders = page.getContent();
         print(orders);
 
     }

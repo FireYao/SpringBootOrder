@@ -89,4 +89,14 @@ public class ItemServiceImpl implements ItemService {
         List<Item> resultList = typedQuery.getResultList();
         return resultList;
     }
+
+    @Override
+    public void updateItemStock(int itemId, int buyNum) {
+        Item one = itemRepository.findOne(itemId);
+        int stock = one.getItemStock() - buyNum;
+        if (stock < 0)
+            throw new RuntimeException("库存不足");
+        one.setItemStock(stock);
+        itemRepository.save(one);
+    }
 }

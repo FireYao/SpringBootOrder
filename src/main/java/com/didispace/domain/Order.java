@@ -21,11 +21,17 @@ public class Order implements Serializable {
     private Integer userId;
     private Integer amout;
     private Integer stauts;
-    @JSONField(format="yyyy-MM-dd")
+
+    @JSONField(format = "yyyy-MM-dd")
+    @Column(name = "create_time")
     private Date createTime;
-    @JSONField(format="yyyy-MM-dd")
+
+    @Column(name = "update_time")
+    @JSONField(format = "yyyy-MM-dd")
     private Date updateTime;
-    @JSONField(format="yyyy-MM-dd")
+
+    @Column(name = "deal_time")
+    @JSONField(format = "yyyy-MM-dd")
     private Date dealTime;
 
     @Transient
@@ -77,7 +83,7 @@ public class Order implements Serializable {
         this.stauts = stauts;
     }
 
-    @Column(name = "create_time")
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -86,7 +92,7 @@ public class Order implements Serializable {
         this.createTime = createTime;
     }
 
-    @Column(name = "update_time")
+
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -95,7 +101,7 @@ public class Order implements Serializable {
         this.updateTime = updateTime;
     }
 
-    @Column(name = "deal_time")
+
     public Date getDealTime() {
         return dealTime;
     }

@@ -18,6 +18,7 @@ import java.util.List;
  */
 
 @Controller
+@ApiIgnore
 public class FirstController {
 
     @Resource
@@ -47,6 +48,7 @@ public class FirstController {
         return "itemsNg";
     }
 
+    @ApiIgnore
     @RequestMapping("/items")
     @ResponseBody
     public Object itemList() {
