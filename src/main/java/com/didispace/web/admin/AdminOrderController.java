@@ -38,7 +38,7 @@ public class AdminOrderController {
     @GetMapping
     public String adminOrder(ModelMap map,
                              @RequestParam(value = "page", defaultValue = "1") Integer page,
-                             @RequestParam(value = "size", defaultValue = "2") Integer size) {
+                             @RequestParam(value = "size", defaultValue = "5") Integer size) {
 
         Pageable pageable = new PageRequest(page - 1, size);
 

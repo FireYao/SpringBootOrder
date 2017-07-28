@@ -37,23 +37,23 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="order : ${orders}">
+        <tr th:each="order : ${orders}" >
             <td th:text="${order.stauts}" hidden="hidden"></td>
-            <td th:text="${order.orderId}"></td>
-            <td th:if="${order.createTime!=null}" th:text="${#dates.format(order.createTime,'yyyy-MM-dd')}"></td>
-            <td th:if="${order.createTime==null}" th:text="${order.createTime}"></td>
-            <td th:text="${order.amout}"></td>
-            <td th:if="${order.updateTime!=null}" th:text="${#dates.format(order.updateTime,'yyyy-MM-dd')}"></td>
-            <td th:if="${order.updateTime==null}" th:text="${order.updateTime}"></td>
-            <td th:switch="${order.stauts}">
+            <td ng-dblclick="showItems($event)" th:text="${order.orderId}" ></td>
+            <td ng-dblclick="showItems($event)" th:if="${order.createTime!=null}" th:text="${#dates.format(order.createTime,'yyyy-MM-dd')}"></td>
+            <td ng-dblclick="showItems($event)" th:if="${order.createTime==null}" th:text="${order.createTime}"></td>
+            <td ng-dblclick="showItems($event)" th:text="${order.amout}"></td>
+            <td ng-dblclick="showItems($event)" th:if="${order.updateTime!=null}" th:text="${#dates.format(order.updateTime,'yyyy-MM-dd')}"></td>
+            <td ng-dblclick="showItems($event)" th:if="${order.updateTime==null}" th:text="${order.updateTime}"></td>
+            <td ng-dblclick="showItems($event)" th:switch="${order.stauts}">
                 <span th:case="1">未支付</span>
                 <span th:case="2">已支付</span>
                 <span th:case="3">待确认收货</span>
                 <span th:case="4">订单完成</span>
                 <span th:case="5">订单关闭</span>
             </td>
-            <td th:if="${order.dealTime!=null}" th:text="${#dates.format(order.dealTime,'yyyy-MM-dd')}"></td>
-            <td th:if="${order.dealTime==null}" th:text="${order.dealTime}"></td>
+            <td ng-dblclick="showItems($event)" th:if="${order.dealTime!=null}" th:text="${#dates.format(order.dealTime,'yyyy-MM-dd')}"></td>
+            <td ng-dblclick="showItems($event)" th:if="${order.dealTime==null}" th:text="${order.dealTime}"></td>
             <td th:switch="${order.stauts}">
                 <div th:case="1">
                     <button class="am-btn am-btn-primary am-btn-xs" disabled="disabled">发货</button>
@@ -105,7 +105,6 @@
             var tds = target.parentNode.parentNode.parentNode.getElementsByTagName("td");
             var stauts = tds[0].innerHTML;
             var orderId = tds[1].innerHTML;
-
             if (point) {
                 stauts = point;
                 if (!confirm("确定要关闭订单吗")) {
@@ -125,6 +124,16 @@
                 window.location.reload();
             })
         }
+
+
+        $scope.showItems = function ($event) {
+            var target = $event.target;
+            var tds = target.parentNode.getElementsByTagName("td");
+            var orderId = tds[1].innerHTML;
+            console.log(orderId);
+
+        }
+
     });
 
     function changePage(page) {
