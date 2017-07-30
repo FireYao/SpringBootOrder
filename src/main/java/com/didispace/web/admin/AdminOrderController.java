@@ -1,5 +1,6 @@
 package com.didispace.web.admin;
 
+import com.alibaba.fastjson.JSONObject;
 import com.didispace.domain.Order;
 import com.didispace.service.OrderService;
 import org.springframework.data.domain.Page;
@@ -42,7 +43,9 @@ public class AdminOrderController {
 
         Pageable pageable = new PageRequest(page - 1, size);
 
-        Page<Order> orderPage = orderService.findAllOnlyOrder(pageable);
+//        Page<Order> orderPage = orderService.findAllOnlyOrder(pageable);
+        Page<Order> orderPage = orderService.findAll(pageable);
+
         map.addAttribute("orders", orderPage.getContent());
         map.addAttribute("totalPage", orderPage.getTotalPages());
         map.addAttribute("totalElements", orderPage.getTotalElements());

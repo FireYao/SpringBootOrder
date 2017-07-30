@@ -92,7 +92,7 @@
             <li class="td th-operation">
                 <div class="item-operation" style="margin-top: 23px;">
                     <input type="number" min="0" max="{{item.itemStock}}"
-                           style="width: 100px;height: 30px;" value="1"/>
+                           style="width: 100px;height: 30px;" value="1" onchange="changeNum(this)"/>
                 </div>
             </li>
 
@@ -107,9 +107,9 @@
 
 </body>
 <script type="text/javascript">
+    var byNumInput;
     var selected = [];
     var app = angular.module("myApp", []);
-    console.log(app);
     app.controller("itemList", function ($scope, $http) {
         $http.get("/items").success(function (response) {
             $scope.items = response;
@@ -121,14 +121,17 @@
         };
 
         $scope.updateSelection = function ($event, item) {
-            //购买数量待获取
-            var num;
+
+            var target = $event.target;
+            var num = target.parentNode.parentNode.parentNode.getElementsByTagName("li")[4].getElementsByTagName("input")[0].value;
+            console.log(num)
+
 
             var orderItem = {
                 itemId: item.itemId,
                 itemNums: num == undefined || num == "" ? 1 : num,
                 itemName: item.itemName,
-                itemPrice: item.itemPrice
+                itemPrice: item.itemPrice,
             };
             var checkbox = $event.target;
             var checked = checkbox.checked;
@@ -157,8 +160,22 @@
             });
 
         }
+
     })
 
+    /**
+     * 输入框change事件
+     * bug--
+     * @param target
+     */
+    function changeNum(target) {
+        var checkbox = target.parentNode.parentNode.parentNode.getElementsByTagName("li")[0].getElementsByTagName("input")[0];
+        var checked = checkbox.checked;
+        if (checked) {
+            byNumInput = target.value;
+            console.log(byNumInput)
+        }
+    }
 
     app.controller('createOrder', function ($scope, $http) {
 
