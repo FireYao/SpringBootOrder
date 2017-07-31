@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Transactional
@@ -84,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findAll() {
-        List<Order> orders = orderRepository.findAll();
+        List<Order> orders = orderRepository.findAll().stream().sorted((o1, o2) -> o1.getOrderId() - o2.getOrderId()).collect(Collectors.toList());
         getResult(orders);
         return orders;
     }

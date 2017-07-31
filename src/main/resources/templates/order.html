@@ -4,7 +4,7 @@
     <meta charset="utf-8"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0"></meta>
 
-    <title>订单管理</title>
+    <title>订单</title>
 
     <link href="/static/AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css"></link>
     <link href="/static/AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css"></link>
@@ -16,7 +16,7 @@
 </head>
 
 <body>
-
+<head th:include="header"/>
 
 <!--标题 -->
 <div class="am-cf am-padding">
@@ -77,7 +77,7 @@
                                     <li class="td td-item">
                                         <div class="item-pic">
                                             <a href="#" class="J_MakePoint">
-                                                <img src="/static/images/kouhong.jpg_80x80.jpg"
+                                                <img src="/static/images/bicycle.jpg"
                                                      class="itempic J_ItemImg"/>
                                             </a>
                                         </div>
@@ -242,7 +242,7 @@
                     $scope.flag = true;
                     return;
                 }
-                window.location.reload();
+                $scope.changePage($scope.pageIndex)
             })
         }
     });

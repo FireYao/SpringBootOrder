@@ -54,7 +54,7 @@ public class ApplicationTest {
 
     @Test
     public void test() {
-        sender.send();
+        sender.send("该发货了");
     }
 
     @Test
