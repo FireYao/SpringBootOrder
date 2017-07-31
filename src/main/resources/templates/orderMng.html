@@ -140,7 +140,6 @@
             })
         }
 
-
         $scope.showItems = function ($event) {
             var target = $event.target;
             var tds = target.parentNode.getElementsByTagName("td");
@@ -148,7 +147,10 @@
             console.log(orderId);
         }
 
+
     });
+
+
 
     function changePage(page) {
         window.location.href = "/adminOrder?page=" + page;

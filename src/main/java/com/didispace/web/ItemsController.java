@@ -3,6 +3,8 @@ package com.didispace.web;
 import com.alibaba.fastjson.JSONObject;
 import com.didispace.domain.Item;
 import com.didispace.service.ItemService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +20,8 @@ import java.util.List;
  */
 
 @Controller
-@ApiIgnore
-public class FirstController {
+@Api(value = "商品")
+public class ItemsController {
 
     @Resource
     private ItemService itemService;
@@ -28,28 +30,18 @@ public class FirstController {
     @GetMapping(value = "/")
     public String index(ModelMap map) {
         map.addAttribute("hello", "hello Thymeleaf");
-
         return "index";
     }
 
-    @ApiIgnore
-    @GetMapping("/itemList")
-    public String itemList(ModelMap map) {
-        List<Item> items = itemService.getItems();
-        map.addAttribute("itemList", items);
 
+    @ApiOperation(value = "商品页面")
+    @GetMapping("/itemsNg")
+    public String items() {
         return "items";
     }
 
-    @ApiIgnore
-    @GetMapping("/itemsNg")
-    public String items() {
-
-        return "itemsNg";
-    }
-
-    @ApiIgnore
-    @RequestMapping("/items")
+    @ApiOperation(value = "商品列表")
+    @GetMapping("/items")
     @ResponseBody
     public Object itemList() {
         List<Item> items = itemService.getItems();

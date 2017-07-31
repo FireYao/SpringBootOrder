@@ -15,10 +15,10 @@ public class Sender {
     @Autowired
     private AmqpTemplate rabbitTemplate;
 
-    public void send() {
-        String context = "hello " + new Date();
-        System.out.println("Sender : " + context);
-        this.rabbitTemplate.convertAndSend("fireyao", context);
+    public void send(String msg) {
+//        String context = "hello " + new Date();
+//        System.out.println("Sender : " + msg);
+        this.rabbitTemplate.convertAndSend("fireyao", msg);
     }
 
 }

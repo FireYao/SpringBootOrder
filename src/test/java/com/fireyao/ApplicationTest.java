@@ -11,6 +11,7 @@ import com.didispace.rabbit.Sender;
 import com.didispace.service.ItemService;
 import com.didispace.service.OrderItemService;
 import com.didispace.service.OrderService;
+import lombok.val;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class ApplicationTest {
 
     @Test
     public void test() {
-        sender.send();
+        sender.send("该发货了");
     }
 
     @Test
@@ -120,6 +121,18 @@ public class ApplicationTest {
 //        System.out.println(page.getTotalElements());
         List<Order> orders = page.getContent();
         print(orders);
+
+    }
+
+    @Test
+    @Transactional
+    public void name7() throws Exception {
+        Sort sort = new Sort(Sort.Direction.ASC, "orderId");
+        Pageable pageable = new PageRequest(0, 4, sort);
+        Page<Order> all = orderRepository.findAll(pageable);
+
+//        List<Order> orders = page.getContent();
+        print(all.getContent());
 
     }
 

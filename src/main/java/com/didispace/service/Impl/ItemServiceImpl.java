@@ -16,6 +16,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getItems() {
-        return itemRepository.findAll();
+        return itemRepository.findAll().stream().sorted((o1, o2) -> o1.getItemId() - o2.getItemId()).collect(Collectors.toList());
     }
 
     @Override

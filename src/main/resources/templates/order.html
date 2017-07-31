@@ -4,7 +4,7 @@
     <meta charset="utf-8"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0"></meta>
 
-    <title>订单管理</title>
+    <title>订单</title>
 
     <link href="/static/AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css"></link>
     <link href="/static/AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css"></link>
@@ -16,11 +16,11 @@
 </head>
 
 <body>
-
+<head th:include="header"/>
 
 <!--标题 -->
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">订单管理</strong> /
+    <div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">订单列表</strong> /
         <small>Order</small>
     </div>
 </div>
@@ -61,8 +61,8 @@
                 </div>
             </div>
 
-            <div class="order-main">
-                <div ng-controller="orderListCtr" class="order-list">
+            <div class="order-main" ng-controller="orderListCtr">
+                <div class="order-list">
                     <span hidden="hidden">{{flag}}</span>
                     <!--交易成功-->
                     <div class="order-status5" ng-repeat="order in orders">
@@ -77,7 +77,7 @@
                                     <li class="td td-item">
                                         <div class="item-pic">
                                             <a href="#" class="J_MakePoint">
-                                                <img src="/static/images/kouhong.jpg_80x80.jpg"
+                                                <img src="/static/images/bicycle.jpg"
                                                      class="itempic J_ItemImg"/>
                                             </a>
                                         </div>
@@ -131,13 +131,10 @@
                 </div>
                 <div>
                     <ul class="am-pagination am-pagination-centered">
-                        <li class="am-disabled"><a href="#">&laquo;</a></li>
-                        <li class="am-active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&raquo;</a></li>
+                        <li ng-click="changePage(pageIndex-1)" id="perPage"><a href="">&laquo;</a></li>
+                        <li class="am-disabled"><a href="#">{{pageIndex}}</a></li>
+                        <li ng-click="changePage(pageIndex+1,totalPages)" id="nextPage"><a href="">&raquo;</a></li>
+                        <li>共{{totalPages}}页</li>
                     </ul>
                 </div>
 
@@ -152,11 +149,37 @@
 
 </body>
 <script type="text/javascript">
+    /*<![CDATA[*/
     var app = angular.module("order", []);
     app.controller("orderListCtr", function ($scope, $http) {
         $http.get("/order").success(function (response) {
-            $scope.orders = response;
+            $scope.orders = response.list;
+            $scope.pageIndex = response.page;
+            $scope.totalPages = response.totalPage;
         });
+
+        $scope.changePage = function (pageIndex, totalPages) {
+            var pageNum = parseInt(pageIndex);
+            var total = parseInt(totalPages);
+            if (1 > pageNum)
+                return;
+            if (total < pageNum)
+                return;
+
+            $http({
+                url: '/order',
+                method: 'get',
+                params: {
+                    page: pageNum,
+                },
+            }).success(function (response) {
+                console.log(response)
+                $scope.orders = response.list;
+                $scope.pageIndex = response.page;
+                $scope.totalPages = response.totalPage;
+            })
+        }
+
 
         $scope.setStauts = function (stauts) {
             if (stauts == 1)
@@ -219,10 +242,10 @@
                     $scope.flag = true;
                     return;
                 }
-                window.location.reload();
+                $scope.changePage($scope.pageIndex)
             })
         }
     });
-
+    /*]]>*/
 </script>
 </html>
