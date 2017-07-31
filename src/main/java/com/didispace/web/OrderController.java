@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @Api(value = "订单信息")
 public class OrderController {
 
+    private final static Sort sort = new Sort(Sort.Direction.ASC, "orderId");
 
     @Autowired
     private Sender sender;
@@ -89,7 +91,9 @@ public class OrderController {
     public Object findAll(@RequestParam(value = "page", defaultValue = "1") Integer page,
                           @RequestParam(value = "size", defaultValue = "5") Integer size) {
 
-        Pageable pageable = new PageRequest(page - 1, size);
+
+
+        Pageable pageable = new PageRequest(page - 1, size, sort);
 
         Page<Order> all = orderService.findAll(pageable);
 

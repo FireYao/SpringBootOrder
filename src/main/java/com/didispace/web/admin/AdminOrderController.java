@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/adminOrder")
 public class AdminOrderController {
 
+
+    private final static Sort sort = new Sort(Sort.Direction.ASC, "orderId");
 
     @Resource
     private OrderService orderService;
@@ -49,7 +52,7 @@ public class AdminOrderController {
                              @RequestParam(value = "page", defaultValue = "1") Integer page,
                              @RequestParam(value = "size", defaultValue = "5") Integer size) {
 
-        Pageable pageable = new PageRequest(page - 1, size);
+        Pageable pageable = new PageRequest(page - 1, size, sort);
 
         Page<Order> orderPage = orderService.findAllOnlyOrder(pageable);
         map.addAttribute("orders", orderPage.getContent().stream()
