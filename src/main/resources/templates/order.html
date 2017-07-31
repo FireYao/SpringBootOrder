@@ -61,8 +61,8 @@
                 </div>
             </div>
 
-            <div class="order-main">
-                <div ng-controller="orderListCtr" class="order-list">
+            <div class="order-main" ng-controller="orderListCtr">
+                <div class="order-list">
                     <span hidden="hidden">{{flag}}</span>
                     <!--交易成功-->
                     <div class="order-status5" ng-repeat="order in orders">
@@ -132,11 +132,12 @@
                 <div>
                     <ul class="am-pagination am-pagination-centered">
                         <li class="am-disabled"><a href="#">&laquo;</a></li>
-                        <li class="am-active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                        <select style="width: 60px;height: 32px;" id="pageSelect">
+                            <option>1</option>
+                            <option>1</option>
+                            <option>1</option>
+                            <option>1</option>
+                        </select>
                         <li><a href="#">&raquo;</a></li>
                     </ul>
                 </div>
@@ -155,7 +156,7 @@
     var app = angular.module("order", []);
     app.controller("orderListCtr", function ($scope, $http) {
         $http.get("/order").success(function (response) {
-            $scope.orders = response;
+            $scope.orders = response.list;
         });
 
         $scope.setStauts = function (stauts) {

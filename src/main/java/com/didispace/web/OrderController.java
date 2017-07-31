@@ -5,9 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.didispace.domain.Item;
 import com.didispace.domain.Order;
 import com.didispace.domain.OrderItem;
+import com.didispace.domain.PageResult;
 import com.didispace.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 import jdk.nashorn.internal.runtime.logging.Logger;
+import org.aspectj.weaver.ast.Or;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -57,9 +62,22 @@ public class OrderController {
     @ApiOperation(value = "所有订单")
     @GetMapping
     @ResponseBody
-    public Object findAll() {
-        List<Order> all = orderService.findAll();
-        return all;
+    public Object findAll(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                          @RequestParam(value = "size", defaultValue = "5") Integer size) {
+
+        Pageable pageable = new PageRequest(page - 1, size);
+
+        Page<Order> all = orderService.findAll(pageable);
+
+        PageResult<Order> result = new PageResult();
+
+        result.setList(all.getContent());
+        result.setPage(page);
+        result.setTotalElements(all.getTotalElements());
+        result.setTotalPage(all.getTotalPages());
+
+//        List<Order> all = orderService.findAll();
+        return result;
     }
 
     @ApiOperation(value = "订单详情")

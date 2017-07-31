@@ -98,7 +98,8 @@
 
             <li class="td td-operation">
                 <div class="item-operation">
-                    <button type="button" class="am-btn am-btn-danger" ng-click="createOneOrder(item)">下单</button>
+                    <button type="button" class="am-btn am-btn-danger" ng-click="createOneOrder($event,item)">下单
+                    </button>
                 </div>
             </li>
         </ul>
@@ -121,8 +122,9 @@
         };
 
         $scope.updateSelection = function ($event, item) {
-            //购买数量待获取
-            var num;
+            var target = $event.target;
+            var input = target.parentNode.parentNode.parentNode.getElementsByTagName("input")[1];
+            var num = input.value;
 
             var orderItem = {
                 itemId: item.itemId,
@@ -130,6 +132,9 @@
                 itemName: item.itemName,
                 itemPrice: item.itemPrice
             };
+
+            console.log(orderItem)
+
             var checkbox = $event.target;
             var checked = checkbox.checked;
             if (checked) {
@@ -140,12 +145,19 @@
             }
         };
 
-        $scope.createOneOrder = function (item) {
+        $scope.createOneOrder = function ($event, item) {
+            var target = $event.target;
+            var nums = target.parentNode.parentNode.parentNode.getElementsByTagName("input")[1].value;
+
+            if (nums > item.itemStock) {
+                alert(item.itemName + "库存不足");
+                return;
+            }
 
 
             var orderItem = {
                 itemId: item.itemId,
-                itemNums: 1,
+                itemNums: nums,
                 itemName: item.itemName,
                 itemPrice: item.itemPrice
             };
@@ -163,9 +175,7 @@
     app.controller('createOrder', function ($scope, $http) {
 
         $scope.createOrder = function () {
-            console.log(JSON.stringify(selected));
             var lenth = selected.length;
-            console.log(lenth)
 
             if (!lenth) {
                 alert("请选择！");
