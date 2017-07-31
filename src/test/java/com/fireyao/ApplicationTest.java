@@ -123,6 +123,18 @@ public class ApplicationTest {
 
     }
 
+    @Test
+    @Transactional
+    public void name7() throws Exception {
+        Sort sort = new Sort(Sort.Direction.ASC, "orderId");
+        Pageable pageable = new PageRequest(0, 4, sort);
+        Page<Order> all = orderRepository.findAll(pageable);
+
+//        List<Order> orders = page.getContent();
+        print(all.getContent());
+
+    }
+
     public void print(Object obj) {
         System.out.println(JSONObject.toJSONString(obj, true));
     }
