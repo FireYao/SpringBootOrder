@@ -131,14 +131,10 @@
                 </div>
                 <div>
                     <ul class="am-pagination am-pagination-centered">
-                        <li class="am-disabled"><a href="#">&laquo;</a></li>
-                        <select style="width: 60px;height: 32px;" id="pageSelect">
-                            <option>1</option>
-                            <option>1</option>
-                            <option>1</option>
-                            <option>1</option>
-                        </select>
-                        <li><a href="#">&raquo;</a></li>
+                        <li ng-click="changePage(pageIndex-1)" id="perPage"><a href="">&laquo;</a></li>
+                        <li class="am-disabled"><a href="#">{{pageIndex}}</a></li>
+                        <li ng-click="changePage(pageIndex+1,totalPages)" id="nextPage"><a href="">&raquo;</a></li>
+                        <li>共{{totalPages}}页</li>
                     </ul>
                 </div>
 
@@ -153,11 +149,37 @@
 
 </body>
 <script type="text/javascript">
+    /*<![CDATA[*/
     var app = angular.module("order", []);
     app.controller("orderListCtr", function ($scope, $http) {
         $http.get("/order").success(function (response) {
             $scope.orders = response.list;
+            $scope.pageIndex = response.page;
+            $scope.totalPages = response.totalPage;
         });
+
+        $scope.changePage = function (pageIndex, totalPages) {
+            var pageNum = parseInt(pageIndex);
+            var total = parseInt(totalPages);
+            if (1 > pageNum)
+                return;
+            if (total < pageNum)
+                return;
+
+            $http({
+                url: '/order',
+                method: 'get',
+                params: {
+                    page: pageNum,
+                },
+            }).success(function (response) {
+                console.log(response)
+                $scope.orders = response.list;
+                $scope.pageIndex = response.page;
+                $scope.totalPages = response.totalPage;
+            })
+        }
+
 
         $scope.setStauts = function (stauts) {
             if (stauts == 1)
@@ -224,6 +246,6 @@
             })
         }
     });
-
+    /*]]>*/
 </script>
 </html>

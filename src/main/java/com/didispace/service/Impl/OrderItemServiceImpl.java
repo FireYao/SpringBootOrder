@@ -26,7 +26,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     public void save(List<OrderItem> orderItem) {
         for (int i = 0; i < orderItem.size(); i++) {
             entityManager.persist(orderItem.get(i));
-            if (i % 30 == 0) {
+            if (i % 10 == 0) {
                 entityManager.flush();
                 entityManager.clear();
             }
