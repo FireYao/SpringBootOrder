@@ -117,7 +117,7 @@ public class ApplicationTest {
 
         Pageable pageable = new PageRequest(0, 2);
         Page<Order> page = orderService.findAll(pageable);
-//        System.out.println(page.getTotalPages());
+        System.out.println(page.getTotalPages());
 //        System.out.println(page.getTotalElements());
         List<Order> orders = page.getContent();
         print(orders);
