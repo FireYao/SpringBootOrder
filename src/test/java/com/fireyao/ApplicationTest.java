@@ -11,6 +11,7 @@ import com.didispace.rabbit.Sender;
 import com.didispace.service.ItemService;
 import com.didispace.service.OrderItemService;
 import com.didispace.service.OrderService;
+import lombok.val;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
