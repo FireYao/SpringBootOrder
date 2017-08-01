@@ -136,7 +136,7 @@
     app.controller("orderInfo", function ($scope, $http) {
         var orderId = document.getElementById("orderId").innerHTML;
         $http.get("/order/" + orderId).success(function (response) {
-            $scope.order = response;
+            $scope.order = response.data;
         });
 
         $scope.setStauts = function (stauts) {
@@ -195,7 +195,7 @@
                 },
             }).success(function (res) {
                 console.log(res)
-                if (res == 2) {
+                if (res.message == 2) {
                     $scope.flag = true;
                     return;
                 }

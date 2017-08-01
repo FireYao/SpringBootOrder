@@ -23,7 +23,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     private OrderItemRepository orderItemRepository;
 
     @Override
-    public void save(List<OrderItem> orderItem) {
+    public void save(List<OrderItem> orderItem) throws Exception {
         for (int i = 0; i < orderItem.size(); i++) {
             entityManager.persist(orderItem.get(i));
             if (i % 10 == 0) {
@@ -35,12 +35,12 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public void deleteByOrderId(int orderId) {
+    public void deleteByOrderId(int orderId) throws Exception {
         orderItemRepository.deleteAllByOrderId(orderId);
     }
 
     @Override
-    public List<OrderItem> findByOrderId(int orderId) {
+    public List<OrderItem> findByOrderId(int orderId) throws Exception {
         return orderItemRepository.findByOrderId(orderId);
     }
 }

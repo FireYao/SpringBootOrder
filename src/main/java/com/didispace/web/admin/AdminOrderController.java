@@ -2,6 +2,7 @@ package com.didispace.web.admin;
 
 import com.didispace.domain.Order;
 import com.didispace.service.OrderService;
+import com.didispace.tools.RestResultGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,8 +39,12 @@ public class AdminOrderController {
     })
     @ResponseBody
     public Object sendOrClose(@RequestParam Integer orderId, @RequestParam Integer stauts) {
-        orderService.sendOrCloseOrder(orderId, stauts);
-        return "success";
+        try {
+            orderService.sendOrCloseOrder(orderId, stauts);
+            return RestResultGenerator.genResult(null, "修改成功");
+        } catch (Exception e) {
+            return RestResultGenerator.genResult(null, "系统异常", false);
+        }
     }
 
     @GetMapping
@@ -50,7 +55,7 @@ public class AdminOrderController {
     })
     public String adminOrder(ModelMap map,
                              @RequestParam(value = "page", defaultValue = "1") Integer page,
-                             @RequestParam(value = "size", defaultValue = "5") Integer size) {
+                             @RequestParam(value = "size", defaultValue = "5") Integer size) throws Exception {
 
         Pageable pageable = new PageRequest(page - 1, size, sort);
 

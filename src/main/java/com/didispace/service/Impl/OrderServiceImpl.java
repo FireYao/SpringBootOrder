@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
     private EntityManager entityManager;
 
     @Override
-    public void createOrder(List<OrderItem> items) {
+    public void createOrder(List<OrderItem> items) throws Exception {
 
         //修改库存
         items.forEach(item -> {
@@ -79,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteOrder(int orderId) {
+    public void deleteOrder(int orderId) throws Exception {
         orderItemService.deleteByOrderId(orderId);
         orderRepository.delete(orderId);
     }
@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order findById(int orderId) {
+    public Order findById(int orderId) throws Exception {
         Order order = orderRepository.findOne(orderId);
         order.setOrderItems(orderItemService.findByOrderId(orderId));
         return order;
@@ -133,7 +133,11 @@ public class OrderServiceImpl implements OrderService {
     private void getResult(List<Order> orders) {
 
         orders.stream().forEach(order -> {
-            order.setOrderItems(orderItemService.findByOrderId(order.getOrderId()));
+            try {
+                order.setOrderItems(orderItemService.findByOrderId(order.getOrderId()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
     }

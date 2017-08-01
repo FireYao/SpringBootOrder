@@ -153,9 +153,9 @@
     var app = angular.module("order", []);
     app.controller("orderListCtr", function ($scope, $http) {
         $http.get("/order").success(function (response) {
-            $scope.orders = response.list;
-            $scope.pageIndex = response.page;
-            $scope.totalPages = response.totalPage;
+            $scope.orders = response.data.list;
+            $scope.pageIndex = response.data.page;
+            $scope.totalPages = response.data.totalPage;
         });
 
         $scope.changePage = function (pageIndex, totalPages) {
@@ -174,9 +174,9 @@
                 },
             }).success(function (response) {
                 console.log(response)
-                $scope.orders = response.list;
-                $scope.pageIndex = response.page;
-                $scope.totalPages = response.totalPage;
+                $scope.orders = response.data.list;
+                $scope.pageIndex = response.data.page;
+                $scope.totalPages = response.data.totalPage;
             })
         }
 
@@ -238,7 +238,7 @@
                 },
             }).success(function (res) {
                 console.log(res)
-                if (res == 2) {
+                if (res.message == 2) {
                     $scope.flag = true;
                     return;
                 }

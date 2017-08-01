@@ -1,4 +1,4 @@
-package com.didispace.domain;
+package com.didispace.tools;
 
 import java.util.List;
 

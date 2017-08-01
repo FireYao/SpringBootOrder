@@ -12,23 +12,23 @@ import java.util.List;
 
 public interface OrderService {
 
-    void createOrder(List<OrderItem> items);
+    void createOrder(List<OrderItem> items) throws Exception;
 
-    void updateStauts(int orderId, int stauts);
+    void updateStauts(int orderId, int stauts) throws Exception;
 
-    void deleteOrder(int orderId);
+    void deleteOrder(int orderId) throws Exception;
 
-    List<Order> findAll();
+    List<Order> findAll() throws Exception;
 
-    Page<Order> findAll(Pageable pageable);
+    Page<Order> findAll(Pageable pageable) throws Exception;
 
-    List<Order> findByUser(int userId);
+    List<Order> findByUser(int userId) throws Exception;
 
-    Order findById(int orderId);
+    Order findById(int orderId) throws Exception;
 
-    List<Order> findAllOnlyOrder();
+    List<Order> findAllOnlyOrder() throws Exception;
 
-    void sendOrCloseOrder(int orderId,int stauts);
+    void sendOrCloseOrder(int orderId, int stauts) throws Exception;
 
-    Page<Order> findAllOnlyOrder(Pageable pageable);
+    Page<Order> findAllOnlyOrder(Pageable pageable) throws Exception;
 }

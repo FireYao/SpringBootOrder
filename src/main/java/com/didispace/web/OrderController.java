@@ -2,18 +2,16 @@ package com.didispace.web;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.didispace.domain.Item;
 import com.didispace.domain.Order;
 import com.didispace.domain.OrderItem;
-import com.didispace.domain.PageResult;
+import com.didispace.tools.PageResult;
 import com.didispace.rabbit.Sender;
 import com.didispace.service.OrderService;
+import com.didispace.tools.RestResultGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.runtime.logging.Logger;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -64,7 +61,11 @@ public class OrderController {
     @GetMapping("/{orderId}")
     @ResponseBody
     public Object orderInfo(@PathVariable("orderId") Integer orderId) {
-        return orderService.findById(orderId);
+        try {
+            return RestResultGenerator.genResult(orderService.findById(orderId), "");
+        } catch (Exception e) {
+            return RestResultGenerator.genResult(null, "系统异常", false);
+        }
     }
 
     @PostMapping
@@ -76,9 +77,12 @@ public class OrderController {
             return "未选中任何商品";
         }
 
-        System.out.println(JSONObject.toJSONString(items));
-        orderService.createOrder(items);
-        return "success";
+        try {
+            orderService.createOrder(items);
+            return RestResultGenerator.genResult(null, "下单成功");
+        } catch (Exception e) {
+            return RestResultGenerator.genResult(null, "系统异常", false);
+        }
     }
 
     @ApiOperation(value = "所有订单分页", notes = "默认一页5条记录")
@@ -92,21 +96,25 @@ public class OrderController {
                           @RequestParam(value = "size", defaultValue = "5") Integer size) {
 
 
+        try {
+            Pageable pageable = new PageRequest(page - 1, size, sort);
 
-        Pageable pageable = new PageRequest(page - 1, size, sort);
+            Page<Order> all = orderService.findAll(pageable);
 
-        Page<Order> all = orderService.findAll(pageable);
+            PageResult<Order> result = new PageResult();
 
-        PageResult<Order> result = new PageResult();
+            result.setList(all.getContent().stream()
+                    .sorted((o1, o2) -> o1.getOrderId() - o2.getOrderId()).collect(Collectors.toList()));
+            result.setPage(page);
+            result.setTotalElements(all.getTotalElements());
+            result.setTotalPage(all.getTotalPages());
 
-        result.setList(all.getContent().stream()
-                .sorted((o1, o2) -> o1.getOrderId() - o2.getOrderId()).collect(Collectors.toList()));
-        result.setPage(page);
-        result.setTotalElements(all.getTotalElements());
-        result.setTotalPage(all.getTotalPages());
+            return RestResultGenerator.genResult(result, "");
 
-//        List<Order> all = orderService.findAll();
-        return result;
+        } catch (Exception e) {
+            return RestResultGenerator.genResult(null, "系统异常", false);
+        }
+
     }
 
     @PutMapping
@@ -117,10 +125,14 @@ public class OrderController {
         //提醒发货
         if (stauts == 2) {
             sender.send("订单" + orderId + "提醒发货");
-            return 2;
+            return RestResultGenerator.genResult(null, "提醒成功");
         }
-        orderService.updateStauts(orderId, stauts);
-        return "success";
+        try {
+            orderService.updateStauts(orderId, stauts);
+            return RestResultGenerator.genResult(null, "修改成功");
+        } catch (Exception e) {
+            return RestResultGenerator.genResult(null, "系统异常");
+        }
     }
 
 }
