@@ -87,7 +87,6 @@
     <ul class="am-pagination am-pagination-centered">
         <li th:if="${page==1}"><a class="am-disabled">&laquo;</a></li>
         <li th:if="${page!=1}"><a href="#" th:href="@{/adminOrder(page=${page-1})}">&laquo;</a></li>
-
         <select style="width: 60px;height: 32px;" id="pageSelect" onchange="changePage(this[selectedIndex].value)">
             <option th:each="i : ${#numbers.sequence(1,totalPage)}" th:text="${i}+'页'" th:value="${i}"
                     th:selected="${i==page}">
