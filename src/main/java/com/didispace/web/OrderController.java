@@ -103,8 +103,7 @@ public class OrderController {
 
             PageResult<Order> result = new PageResult();
 
-            result.setList(all.getContent().stream()
-                    .sorted((o1, o2) -> o1.getOrderId() - o2.getOrderId()).collect(Collectors.toList()));
+            result.setList(all.getContent());
             result.setPage(page);
             result.setTotalElements(all.getTotalElements());
             result.setTotalPage(all.getTotalPages());
