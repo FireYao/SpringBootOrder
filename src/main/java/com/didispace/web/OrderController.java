@@ -74,7 +74,7 @@ public class OrderController {
     @ResponseBody
     public Object createOrder(@RequestBody List<OrderItem> items) {
         if (items == null || items.size() < 1) {
-            return "未选中任何商品";
+            return RestResultGenerator.genResult(null, "未选中任何商品", false);
         }
 
         try {
