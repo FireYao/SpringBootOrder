@@ -59,7 +59,8 @@ public class AdminOrderController {
 
         Pageable pageable = new PageRequest(page - 1, size, sort);
 
-        Page<Order> orderPage = orderService.findAllOnlyOrder(pageable);
+//        Page<Order> orderPage = orderService.findAllOnlyOrder(pageable);
+        Page<Order> orderPage = orderService.findAll(pageable);
         map.addAttribute("orders", orderPage.getContent().stream()
                 .sorted((o1, o2) -> o1.getOrderId() - o2.getOrderId()).collect(Collectors.toList()));
         map.addAttribute("totalPage", orderPage.getTotalPages());
