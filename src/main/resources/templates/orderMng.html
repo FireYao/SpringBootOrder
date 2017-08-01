@@ -87,7 +87,8 @@
 
                 <div class="am-modal am-modal-no-btn" tabindex="-1" th:id="'doc-modal-'+${order.orderId}">
                     <div class="am-modal-dialog">
-                        <div class="am-modal-hd">订单明细
+                        <div class="am-modal-hd">订单明细&nbsp;
+                            <span th:text="'编号'+${order.orderId}"></span>
                             <a href="javascript: void(0)" class="am-close am-close-spin"
                                data-am-modal-close="">&times;</a>
                         </div>
