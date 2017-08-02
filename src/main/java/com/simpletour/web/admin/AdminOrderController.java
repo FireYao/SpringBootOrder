@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 public class AdminOrderController {
 
 
-    private final static Sort sort = new Sort(Sort.Direction.ASC, "orderId");
+    private final static Sort ID_SORT = new Sort(Sort.Direction.ASC, "orderId");
 
     @Resource
     private OrderService orderService;
@@ -55,7 +55,7 @@ public class AdminOrderController {
                              @RequestParam(value = "page", defaultValue = "1") Integer page,
                              @RequestParam(value = "size", defaultValue = "10") Integer size) throws Exception {
 
-        Pageable pageable = new PageRequest(page - 1, size, sort);
+        Pageable pageable = new PageRequest(page - 1, size, ID_SORT);
 
 //        Page<Order> orderPage = orderService.findAllOnlyOrder(pageable);
         Page<Order> orderPage = orderService.findAll(pageable);
