@@ -4,14 +4,12 @@ package com.simpletour.web;
 import com.simpletour.domain.Order;
 import com.simpletour.domain.OrderItem;
 import com.simpletour.tools.PageResult;
-import com.simpletour.rabbit.Sender;
 import com.simpletour.service.OrderService;
 import com.simpletour.tools.RestResultGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +27,6 @@ import java.util.List;
 public class OrderController {
 
     private final static Sort sort = new Sort(Sort.Direction.ASC, "orderId");
-
-    @Autowired
-    private Sender sender;
 
     @Resource
     private OrderService orderService;
@@ -121,7 +116,6 @@ public class OrderController {
     public Object updateOrder(@RequestParam Integer orderId, @RequestParam Integer stauts) {
         //提醒发货
         if (stauts == 2) {
-            sender.send("订单" + orderId + "提醒发货");
             return RestResultGenerator.genResult(null, "提醒成功");
         }
         try {

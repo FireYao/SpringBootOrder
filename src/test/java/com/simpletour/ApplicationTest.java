@@ -6,13 +6,11 @@ import com.simpletour.dao.OrderItemRepository;
 import com.simpletour.dao.OrderRepository;
 import com.simpletour.domain.Item;
 import com.simpletour.domain.Order;
-import com.simpletour.rabbit.Sender;
 import com.simpletour.service.ItemService;
 import com.simpletour.service.OrderItemService;
 import com.simpletour.service.OrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +26,6 @@ import java.util.List;
 @SpringBootTest(classes = Application.class)
 public class ApplicationTest {
 
-    @Autowired
-    private Sender sender;
 
     @Resource
     private ItemService itemService;
@@ -49,10 +45,6 @@ public class ApplicationTest {
     @Resource
     private OrderRepository orderRepository;
 
-    @Test
-    public void test() {
-        sender.send("该发货了");
-    }
 
     @Test
     public void itemTest() throws Exception {
