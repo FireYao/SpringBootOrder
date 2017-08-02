@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getItems() {
-        return itemRepository.findAll().stream().sorted((o1, o2) -> o1.getItemId() - o2.getItemId()).collect(Collectors.toList());
+        return itemRepository.findAll().stream().filter(item -> item.getItemStock() > 0).sorted((o1, o2) -> o1.getItemId() - o2.getItemId()).collect(Collectors.toList());
     }
 
     @Override

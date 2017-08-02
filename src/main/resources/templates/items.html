@@ -161,7 +161,7 @@
             $http.post('/order',
                 JSON.stringify(orderItem)
             ).success(function (response) {
-                console.log(response)
+                alert(response.message)
                 $http.get("/items").success(function (response) {
                     $scope.items = response;
                 });
@@ -183,10 +183,8 @@
             $http.post('/order',
                 JSON.stringify(selected)
             ).success(function (response) {
-                console.log(response)
-                $http.get("/items").success(function (response) {
-                    $scope.items = response;
-                });
+                alert(response.message)
+                document.location.reload();
             });
 
         }
