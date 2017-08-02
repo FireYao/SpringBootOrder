@@ -3,6 +3,7 @@ package com.simpletour.service.Impl;
 import com.simpletour.dao.ItemRepository;
 import com.simpletour.domain.Item;
 import com.simpletour.domain.Item_;
+import com.simpletour.exception.ItemStockNotEnoughException;
 import com.simpletour.service.ItemService;
 import org.springframework.stereotype.Service;
 
@@ -96,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
         Item one = itemRepository.findOne(itemId);
         int stock = one.getItemStock() - buyNum;
         if (stock < 0)
-            throw new RuntimeException("库存不足");
+            throw new ItemStockNotEnoughException("库存不足");
         one.setItemStock(stock);
         itemRepository.save(one);
     }
