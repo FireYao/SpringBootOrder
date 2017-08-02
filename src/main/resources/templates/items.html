@@ -106,6 +106,7 @@
 
 </body>
 <script type="text/javascript">
+    /*<![CDATA[*/
     var selected = [];
     var app = angular.module("myApp", []);
     console.log(app);
@@ -128,7 +129,8 @@
                 itemId: item.itemId,
                 itemNums: num == undefined || num == "" ? 1 : num,
                 itemName: item.itemName,
-                itemPrice: item.itemPrice
+                itemPrice: item.itemPrice,
+                itemStock: item.itemStock
             };
 
             console.log(orderItem)
@@ -174,6 +176,23 @@
     app.controller('createOrder', function ($scope, $http) {
 
         $scope.createOrder = function () {
+
+            var car = [];
+            var flag = false;
+            console.log(selected);
+            for (var i = 0; i < selected.length; i++) {
+                var item = selected[i];
+                if (item.itemNums > item.itemStock) {
+                    flag = true;
+                    car.push(item.itemName);
+                }
+            }
+
+            if (flag) {
+                alert(JSON.stringify(car) + "库存不足,请重新下单");
+                return;
+            }
+
             var lenth = selected.length;
 
             if (!lenth) {
@@ -186,10 +205,9 @@
                 alert(response.message)
                 document.location.reload();
             });
-
         }
     });
 
-
+    /*]]>*/
 </script>
 </html>
