@@ -46,14 +46,14 @@ public class AdminOrderController {
     }
 
     @GetMapping
-    @ApiOperation(value = "订单管理分页列表", notes = "默认一页5条记录")
+    @ApiOperation(value = "订单管理分页列表", notes = "默认一页10条记录")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "当前页", required = false, dataType = "Integer"),
             @ApiImplicitParam(name = "size", value = "每页记录数", required = false, dataType = "Integer")
     })
     public String adminOrder(ModelMap map,
                              @RequestParam(value = "page", defaultValue = "1") Integer page,
-                             @RequestParam(value = "size", defaultValue = "5") Integer size) throws Exception {
+                             @RequestParam(value = "size", defaultValue = "10") Integer size) throws Exception {
 
         Pageable pageable = new PageRequest(page - 1, size, sort);
 
