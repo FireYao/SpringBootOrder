@@ -19,13 +19,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 public class ApplicationTest {
 
+    @Resource
+    private EntityManager entityManager;
 
     @Resource
     private ItemService itemService;
@@ -121,6 +128,24 @@ public class ApplicationTest {
 
 //        List<Order> orders = page.getContent();
         print(all.getContent());
+
+    }
+
+    @Test
+    public void name8() throws Exception {
+
+        Metamodel metamodel = entityManager.getMetamodel();
+
+        EntityType<Item> entity = metamodel.entity(Item.class);
+
+        Set<Attribute<Item, ?>> declaredAttributes = entity.getDeclaredAttributes();
+        declaredAttributes.stream().forEach(itemAttribute -> {
+            System.out.println(itemAttribute.getName());
+        });
+
+        Attribute<? super Item, ?> itemId = entity.getAttribute("itemId");
+
+        System.out.println(itemId.getName());
 
     }
 
