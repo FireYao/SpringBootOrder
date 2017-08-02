@@ -3,6 +3,7 @@ package com.simpletour.web;
 
 import com.simpletour.domain.Order;
 import com.simpletour.domain.OrderItem;
+import com.simpletour.exception.ItemStockNotEnoughException;
 import com.simpletour.tools.PageResult;
 import com.simpletour.service.OrderService;
 import com.simpletour.tools.RestResultGenerator;
@@ -26,7 +27,7 @@ import java.util.List;
 @Api(value = "订单信息")
 public class OrderController {
 
-    private final static Sort sort = new Sort(Sort.Direction.ASC, "orderId");
+    private final static Sort ID_SORT = new Sort(Sort.Direction.ASC, "orderId");
 
     @Resource
     private OrderService orderService;
@@ -73,6 +74,8 @@ public class OrderController {
         try {
             orderService.createOrder(items);
             return RestResultGenerator.genResult(null, "下单成功");
+        } catch (ItemStockNotEnoughException ie) {
+            return RestResultGenerator.genResult(null, ie.getMessage(), false);
         } catch (Exception e) {
             return RestResultGenerator.genResult(null, "系统异常", false);
         }
@@ -90,7 +93,7 @@ public class OrderController {
 
 
         try {
-            Pageable pageable = new PageRequest(page - 1, size, sort);
+            Pageable pageable = new PageRequest(page - 1, size, ID_SORT);
 
             Page<Order> all = orderService.findAll(pageable);
 
