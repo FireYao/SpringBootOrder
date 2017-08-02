@@ -1,5 +1,5 @@
 /*
-package com.didispace.config;
+package com.simpletour.config;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +12,8 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.fireyao.dao")
-@EntityScan(basePackages = "com.fireyao.domain")
+@EnableJpaRepositories(basePackages = "com.simpletour.dao")
+@EntityScan(basePackages = "com.simpletour.domain")
 @EnableTransactionManagement
 public class JpaConfig {
 
