@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
@@ -165,14 +164,17 @@ public class Java8Test {
     @Test
     public void name11() throws Exception {
 
-        Stream<Integer> stream = Stream.of(10, 22, 20, 331, 4, 200, 200, 200, 123, 44, 2, 1, 23, 124, 552, 10);
-       /* //distinct 去重
-        System.out.println(stream.distinct()
-                //求和
-                .reduce((integer, integer2) -> integer + integer2).get());*/
+        List<Integer> list = Arrays.asList(10, 22, 20, 331, 4, 200, 200, 200, 123, 44, 2, 1, 23, 124, 552, 10);
+
+        //distinct 筛选去重
+        Integer reduce = list.stream().distinct()
+                //规约 将一个流里的元素反复结合起来 得到一个值  如果reduce(T identity, BinaryOperator)不传第一个参数identity 将返回一个Optional<T> 避免空指针异常
+                .reduce(0, ((integer, integer2) -> integer + integer2));
+        Optional<Integer> reduce1 = list.stream().distinct()
+                .reduce((integer, integer2) -> integer + integer2);
         //判断stream里是否有任意一个大于100
-        boolean b = stream.anyMatch(integer -> integer < 100);
-        System.out.println(b);
+     /*   boolean b = list.stream().anyMatch(integer -> integer < 100);
+        System.out.println(b);*/
     }
 
 
@@ -313,8 +315,76 @@ public class Java8Test {
 
     }
 
+    List<Student> studentList = Arrays.asList(new Student(80, "B"),
+            new Student(90, "A"),
+            new Student(100, "D"),
+            new Student(100, "E"),
+            new Student(58, "F"),
+            new Student(41, "G"),
+            new Student(84, "H"),
+            new Student(59, "I"),
+            new Student(65, "J"),
+            new Student(100, "K"),
+            new Student(98, "L"),
+            new Student(59, "M"),
+            new Student(60, "N"),
+            new Student(66, "O"));
 
-    public void print(Object obj) {
+    @Test
+    public void name20() throws Exception {
+        //统计分数不及格的学生个数
+        Integer c = studentList.stream()
+                .map(student -> student.getScore() < 60 ? 1 : 0)
+                .reduce(0, Integer::sum);
+
+        System.out.println(c);
+    }
+
+    @Test
+    public void name21() throws Exception {
+        Map<String, Integer> collect = studentList.stream().collect(Collectors.toMap(Student::getName, Student::getScore));
+        print(collect);
+    }
+
+    @Test
+    public void name22() throws Exception {
+        String collect = studentList.stream().map(Student::getName).collect(Collectors.joining(",", "---", "---"));
+        System.out.println(collect);
+    }
+
+    @Test
+    public void name23() throws Exception {
+        Integer collect = studentList.stream().map(Student::getScore).collect(Collectors.reducing(0, Integer::sum));
+        print(collect);
+    }
+
+    @Test
+    public void name24() throws Exception {
+        Map<String, List<Student>> collect = studentList.stream()
+                .sorted((s1, s2) -> s1.getScore() - s2.getScore())
+                .collect(Collectors.groupingBy((s) -> {
+                    if (s.getScore() < 60)
+                        return "不及格";
+                    else if (s.getScore() > 60 && s.getScore() < 90)
+                        return "良好";
+                    else
+                        return "优秀";
+                }));
+        print(collect);
+    }
+
+    @Test
+    public void name25() throws Exception {
+        Optional<String> reduce = studentList.stream().map(Student::getName).sorted().reduce((s, s2) -> s + "," + s2);
+        System.out.println(reduce.get());
+    }
+
+    @Test
+    public void name26() throws Exception {
+        Optional<Object> empty = Optional.empty();
+    }
+
+    public static void print(Object obj) {
         System.out.println(JSONObject.toJSONString(obj, true));
     }
 }

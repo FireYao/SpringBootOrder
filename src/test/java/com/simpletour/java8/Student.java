@@ -10,6 +10,12 @@ class Student {
     public Student() {
     }
 
+    public Student(int score, String name, LocalDate birthday) {
+        this.score = score;
+        this.name = name;
+        this.birthday = birthday;
+    }
+
     public LocalDate getBirthday() {
         return birthday;
     }
@@ -21,6 +27,7 @@ class Student {
     public Student(int score, String name) {
         this.score = score;
         this.name = name;
+        this.birthday = LocalDate.now();
     }
 
     public int getScore() {
