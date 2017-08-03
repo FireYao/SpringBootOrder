@@ -17,7 +17,7 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "order_id")
-    private int orderId;
+    private Integer orderId;
     private Integer userId;
     private Integer amout;
     private Integer stauts;

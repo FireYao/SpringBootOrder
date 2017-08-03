@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * TopicExchange 模式下的消息会发送到所有与指定RouteKey匹配/模糊匹配的Queue上
  * 这种模式需要RouteKey,也需要提前绑定Exchange和Queue
  * 绑定时,提供一个该队列关心的主题，如“#.topic.#”表示该队列关心所有涉及topic的消息(一个RouteKey为”mq.topic.ok”的消息会被转发到该队列)。
- * # 表示0个或若干个关键字，* 表示一个关键字。如 topic.* 能与 topic.a 匹配，无法与 topic.a.queue  匹配；但是 topic.# 能与上述两者匹配。
+ * # 表示1个或若干个关键字，* 表示一个关键字。如 topic.* 能与 topic.a 匹配，无法与 topic.a.queue  匹配；但是 topic.# 能与上述两者匹配。
  */
 @Configuration
 public class TopicExchangeConfig {

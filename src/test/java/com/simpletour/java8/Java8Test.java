@@ -230,8 +230,8 @@ public class Java8Test {
         });
         //此时会报异常.Stream执行foreach后 该Stream就关闭了
         //java.lang.IllegalStateException: stream has already been operated upon or closed
-        List<Person> collect = stream.collect(Collectors.toList());
-        System.out.println(JSON.toJSONString(collect));
+//        List<Person> collect = stream.collect(Collectors.toList());
+//        System.out.println(JSON.toJSONString(collect));
 
     }
 

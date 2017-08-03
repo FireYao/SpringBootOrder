@@ -9,16 +9,16 @@ import com.simpletour.service.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -32,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public void createOrder(List<OrderItem> items) throws Exception {
 
         //修改库存
@@ -59,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void updateStauts(int orderId, int stauts) {
         Date dealTime = null;
         if (stauts == 3)
@@ -69,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(int orderId) throws Exception {
         orderItemService.deleteByOrderId(orderId);
         orderRepository.delete(orderId);
@@ -108,6 +111,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void sendOrCloseOrder(int orderId, int stauts) {
 
         orderRepository.updateStauts(stauts + 1, orderId, new Date(), null);
