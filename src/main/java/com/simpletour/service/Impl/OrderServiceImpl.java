@@ -126,7 +126,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void getResult(List<Order> orders) {
 
-        orders.stream().forEach(order -> {
+        orders.forEach(order -> {
             try {
                 order.setOrderItems(orderItemService.findByOrderId(order.getOrderId()));
             } catch (Exception e) {

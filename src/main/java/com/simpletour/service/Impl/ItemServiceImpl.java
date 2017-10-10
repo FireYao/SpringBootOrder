@@ -95,17 +95,28 @@ public class ItemServiceImpl implements ItemService {
         CriteriaQuery<Item> query = criteriaBuilder.createQuery(Item.class);
         Root<Item> itemRoot = query.from(Item.class);
         List<Predicate> predicatesList = new ArrayList<>();
+        //name模糊查询 ,like语句
         if (name != null) {
-            predicatesList.add(criteriaBuilder.and(criteriaBuilder.like(itemRoot.get(Item_.itemName), "%" + name + "%")));
+            predicatesList.add(
+                    criteriaBuilder.and(
+                            criteriaBuilder.like(
+                                    itemRoot.get(Item_.itemName), "%" + name + "%")));
         }
+
+        // itemPrice 小于等于 <= 语句
         if (price != null) {
-            predicatesList.add(criteriaBuilder.and(criteriaBuilder.le(itemRoot.get(Item_.itemPrice), price)));
+            predicatesList.add(
+                    criteriaBuilder.and(
+                            criteriaBuilder.le(
+                                    itemRoot.get(Item_.itemPrice), price)));
         }
+        //itemStock 大于等于 >= 语句
         if (stock != null) {
-            predicatesList.add(criteriaBuilder.and(criteriaBuilder.ge(itemRoot.get(Item_.itemStock), stock)));
+            predicatesList.add(
+                    criteriaBuilder.and(
+                            criteriaBuilder.ge(
+                                    itemRoot.get(Item_.itemStock), stock)));
         }
-
-
         query.where(predicatesList.toArray(new Predicate[predicatesList.size()]));
         TypedQuery<Item> typedQuery = entityManager.createQuery(query);
         List<Item> resultList = typedQuery.getResultList();

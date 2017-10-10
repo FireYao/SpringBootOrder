@@ -6,9 +6,11 @@ import com.simpletour.dao.OrderItemRepository;
 import com.simpletour.dao.OrderRepository;
 import com.simpletour.domain.*;
 import com.simpletour.domain.Order;
+import com.simpletour.query.ItemQuery;
 import com.simpletour.service.ItemService;
 import com.simpletour.service.OrderItemService;
 import com.simpletour.service.OrderService;
+import com.simpletour.util.ExportExcel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
@@ -25,7 +28,10 @@ import javax.persistence.criteria.*;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
+import javax.swing.*;
 import javax.transaction.Transactional;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -199,11 +205,24 @@ public class ApplicationTest {
         Root<Order> root = query.from(Order.class);
 //        ListJoin<Order, OrderItem> join = root.join(Order_.orderItems);
         List<Predicate> predicatesList = new ArrayList<>();
-        query.where(criteriaBuilder.between(root.get(Order_.createTime), new Date("2017/07/31"), new Date("2017/08/20")));
+//        query.where(criteriaBuilder.between(root.get(Order_.createTime), new Date("2017/07/31"), new Date("2017/08/20")));
+
+        /*
+        ----------------------------------------------------------------------------------------------------------------
+            等价于
+            query.where(criteriaBuilder.between(root.get(Order_.createTime), new Date("2017/07/31"), new Date("2017/08/20")));
+         */
+        predicatesList.add(criteriaBuilder.greaterThan(root.get(Order_.createTime), new Date("2017/07/31")));
+        predicatesList.add(criteriaBuilder.lessThan(root.get(Order_.createTime), new Date("2017/08/2")));
+        query.where(predicatesList.toArray(new Predicate[predicatesList.size()]));
+        /*
+            ----------------------------------------------------------------------------------------------------------------
+         */
 
         TypedQuery<Order> query1 = entityManager.createQuery(query);
         List<Order> resultList = query1.getResultList();
         print(resultList);
+
     }
 
     @Test
@@ -215,6 +234,7 @@ public class ApplicationTest {
 
     /**
      * 联合查询
+     *
      * @param name
      * @param price
      * @param stock
@@ -239,6 +259,114 @@ public class ApplicationTest {
         TypedQuery<Item> typedQuery = entityManager.createQuery(query);
         List<Item> resultList = typedQuery.getResultList();
         return resultList;
+    }
+
+
+    @Test
+    public void name13() throws Exception {
+
+        String name = "垃圾";
+/*
+        Specification<Item> itemSpecification = new Specification<Item>() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Predicate predicate = criteriaBuilder.and(criteriaBuilder.like(root.get(Item_.itemName), "%" + name + "%"));
+                return predicate;
+            }
+        };*/
+
+        Specification<Item> itemSpecification =
+                (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.and(criteriaBuilder.like(root.get(Item_.itemName), "%" + name + "%"));
+
+
+        List<Item> all = itemRepository.findAll(itemSpecification);
+        print(all);
+
+    }
+
+
+    @Test
+    public void poi() throws Exception {
+        try {
+            List<Order> data = orderService.findAllOnlyOrder();
+//            List<Item> data = itemRepository.findAll();
+            String title = "订单";
+
+            String[] headers = {"订单编号", "用户编号", "总金额", "状态", "创建日期", "最后更新日期", "成交时间"};
+//            String[] headers = {"商品编号", "商品名", "单价", "库存"};
+
+            ExportExcel<Order> excel = new ExportExcel();
+
+            OutputStream out = new FileOutputStream("F://excel//item.xls");
+
+            excel.exportExcel(title, headers, data, out, "yyyy-MM-dd");
+
+            out.close();
+
+//            JOptionPane.showMessageDialog(null, "导出成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void name99() throws Exception {
+        List<Order> data = orderService.findAllOnlyOrder();
+        print(data);
+    }
+
+
+    @Test
+    public void test10() throws Exception {
+
+        List<Item> byConditions = findByCondition("车", null, null);
+        print(byConditions);
+
+    }
+
+    public List<Item> findByCondition(String name, Integer price, Integer stock) {
+        List<Item> all = itemRepository.findAll((itemRoot, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicatesList = new ArrayList<>();
+            //name模糊查询 ,like语句
+            if (name != null) {
+                predicatesList.add(
+                        criteriaBuilder.and(
+                                criteriaBuilder.like(
+                                        itemRoot.get(Item_.itemName), "%" + name + "%")));
+            }
+            // itemPrice 小于等于 <= 语句
+            if (price != null) {
+                predicatesList.add(
+                        criteriaBuilder.and(
+                                criteriaBuilder.le(
+                                        itemRoot.get(Item_.itemPrice), price)));
+            }
+            //itemStock 大于等于 >= 语句
+            if (stock != null) {
+                predicatesList.add(
+                        criteriaBuilder.and(
+                                criteriaBuilder.ge(
+                                        itemRoot.get(Item_.itemStock), stock)));
+            }
+            return criteriaBuilder.and(predicatesList.toArray(new Predicate[predicatesList.size()]));
+        });
+        return all;
+    }
+
+    @Test
+    public void test3() throws Exception {
+
+        ItemQuery itemQuery = new ItemQuery();
+        itemQuery.setItemName("车");
+        itemQuery.setItemPriceMax(50);
+        itemQuery.setItemPriceMax(200);
+
+        Pageable pageable = itemQuery.toPageable(new Sort(Sort.Direction.ASC, "itemId"));
+
+        Page<Item> all = itemRepository.findAll(itemQuery.toSpec(), pageable);
+
+        print(all.getContent());
+
     }
 
     public void print(Object obj) {

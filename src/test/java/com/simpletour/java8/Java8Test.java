@@ -2,6 +2,7 @@ package com.simpletour.java8;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.log4j.Log4j2;
 import org.junit.Test;
 
 import java.io.File;
@@ -11,7 +12,6 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public class Java8Test {
 
@@ -379,14 +379,35 @@ public class Java8Test {
         System.out.println(reduce.get());
     }
 
+    public void name26(Long a) throws Exception {
+        Long b;
+        b = a == null ? 0 : a;
+        System.out.println(a);
+        System.out.println(b);
+    }
+
     @Test
-    public void name26() throws Exception {
-        Optional<Object> empty = Optional.empty();
+    public void name27() throws Exception {
+
+        int a = 1;
+        int b = 1;
+
+        a -= b;
+        System.out.println(a);
+        System.out.println(b);
+
+    }
+
+    @Test
+    public void name28() throws Exception {
+
+        System.out.println(String.format("123,{%s},321,{%s}", "32aa", "zzz"));
+
+
     }
 
     public static void print(Object obj) {
         System.out.println(JSONObject.toJSONString(obj, true));
     }
+
 }
-
-

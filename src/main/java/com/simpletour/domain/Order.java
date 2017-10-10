@@ -22,6 +22,7 @@ public class Order implements Serializable {
     private Integer amout;
     private Integer stauts;
 
+
     @JSONField(format = "yyyy-MM-dd")
     @Column(name = "create_time")
     private Date createTime;
@@ -34,7 +35,7 @@ public class Order implements Serializable {
     @JSONField(format = "yyyy-MM-dd")
     private Date dealTime;
 
-    @Transient
+    @OneToMany
     private List<OrderItem> orderItems;
 
     public List<OrderItem> getOrderItems() {

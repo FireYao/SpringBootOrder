@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @DynamicUpdate
@@ -16,6 +17,7 @@ public class OrderItem implements Serializable {
     private Integer itemNums;
     private String itemName;
     private Integer itemPrice;
+
     @Id
     @GeneratedValue
     @Column(name = "oi_id")
