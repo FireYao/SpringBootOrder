@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface QueryWord {
 
-    // 数据库中字段名,默认为空字符串,则Query类中的字段要与数据库中字段一致
+    // 数据库中字段名,默认为空字符串湿哒哒所大多王企鹅群,则Query类中的字段要与数据库中字段一致
     String column() default "";
 
     // equal, like, gt, lt...
