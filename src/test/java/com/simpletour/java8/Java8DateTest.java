@@ -20,6 +20,8 @@ public class Java8DateTest {
 
         System.out.println(LocalTime.now());
 
+        System.out.println("test");
+
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         String format = dateTimeFormatter.format(ldt);
