@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @DynamicUpdate
@@ -115,29 +116,12 @@ public class Order implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Order order = (Order) o;
-
-        if (orderId != order.orderId) return false;
-        if (userId != null ? !userId.equals(order.userId) : order.userId != null) return false;
-        if (amout != null ? !amout.equals(order.amout) : order.amout != null) return false;
-        if (stauts != null ? !stauts.equals(order.stauts) : order.stauts != null) return false;
-        if (createTime != null ? !createTime.equals(order.createTime) : order.createTime != null) return false;
-        if (updateTime != null ? !updateTime.equals(order.updateTime) : order.updateTime != null) return false;
-        if (dealTime != null ? !dealTime.equals(order.dealTime) : order.dealTime != null) return false;
-
-        return true;
+        return Objects.equals(orderId, order.orderId);
     }
 
     @Override
     public int hashCode() {
-        int result = orderId;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (amout != null ? amout.hashCode() : 0);
-        result = 31 * result + (stauts != null ? stauts.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        result = 31 * result + (dealTime != null ? dealTime.hashCode() : 0);
-        return result;
+        return Objects.hash(orderId);
     }
 }

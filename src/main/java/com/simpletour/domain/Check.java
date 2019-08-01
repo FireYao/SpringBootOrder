@@ -8,4 +8,7 @@ import lombok.Setter;
 public class Check {
 
     private String check;
+
+    private int a;
+
 }
