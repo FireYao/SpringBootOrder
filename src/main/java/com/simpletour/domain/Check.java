@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Check {
 
-    private String checkMsg;
+    private String checkMerge;
 
     private int abc;
 
