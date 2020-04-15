@@ -11,4 +11,6 @@ public class Check {
 
     private int abc;
 
+    private String check;
+
 }
